@@ -12,7 +12,7 @@ section .data
 	a4_l equ $-a4_s
 	a5_s db 34," tidak ditemukan",10
 	a5_l equ $-a5_s
-	filename db "id_barang.txt"
+	filename db "database_barang.txt",0
 
 section .bss
 	input resb 5
@@ -136,8 +136,8 @@ get_id:
 	mov rsi,input
 	mov rdx,5
 	syscall
-	cmp rax,4
 	dec rax
+	cmp rax,3
 	mov [in_l],rax
 	jne not_found
 	ret

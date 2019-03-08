@@ -1,2 +1,4 @@
 break found
+break search
+break open_file
 
