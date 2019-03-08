@@ -1,4 +1,2 @@
-break _start
-break open_file
-break _start
+break show_wait
 
