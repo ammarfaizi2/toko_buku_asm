@@ -1,5 +1,5 @@
 ;
-; @author Ammar Faizi <ammarfaizi2@gmail.com> https://ww.facebook.com/ammarfaizi2
+; @author Ammar Faizi <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
 ;
 section .data
 	a1_s db "Masukkan ID barang: "
@@ -8,6 +8,7 @@ section .data
 	a2_l equ $-a2_s
 	a3_s db 10,"Barang ditemukan!",10
 	a3_l equ $-a3_s
+	a4_s db 10,"Barang tidak ditemukan!",
 	filename db "id_barang.txt"
 
 section .bss
@@ -43,7 +44,7 @@ open_file:
 	ret
 
 search:
-	cmp r10,1
+	cmp r8,1
 	je chread
 	call sread
 	call check
@@ -82,11 +83,12 @@ check:
 	and rdi,0x00ffffff
 	cmp rsi,rdi
 	je found_flag
+	mov r8,1
 	ret
 
 found_flag:
 	mov rax,1
-	mov r10,1
+	mov r11,1
 	jmp check+35
 	ret
 
@@ -96,8 +98,18 @@ chread:
 	mov rsi,search_buf
 	mov rdx,1
 	syscall
-	mov r10,0
-	call search
+	mov rsi,[rsi]
+	cmp rax,0
+	je exit
+	and rsi,0xff
+	cmp rsi,10
+	je check_end
+	jmp chread
+	ret
+
+check_end:
+	mov r8,0
+	jmp search
 	ret
 
 sread:

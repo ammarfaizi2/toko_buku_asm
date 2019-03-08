@@ -1,2 +1,3 @@
-break show_wait
+break search
+break chread
 
