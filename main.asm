@@ -8,14 +8,17 @@ section .data
 	a2_l equ $-a2_s
 	a3_s db 10,"Barang ditemukan!",10
 	a3_l equ $-a3_s
-	a4_s db 10,"Barang tidak ditemukan!",
+	a4_s db 10,"Mohon maaf, barang dengan ID: ",34
+	a4_l equ $-a4_s
+	a5_s db 34," tidak ditemukan",10
+	a5_l equ $-a5_s
 	filename db "id_barang.txt"
 
 section .bss
 	input resb 5
 	search_buf resb 5
 	fetch_buf resb 1
-
+	in_l resb 2
 section .text
 	global _start
 
@@ -72,6 +75,7 @@ found:
 	mov rdx,rax
 	call mp
 	mov rdx,[fetch_buf]
+	and rdx,0xff
 	cmp rdx,10
 	jne found
 	ret
@@ -100,7 +104,7 @@ chread:
 	syscall
 	mov rsi,[rsi]
 	cmp rax,0
-	je exit
+	je not_found
 	and rsi,0xff
 	cmp rsi,10
 	je check_end
@@ -132,11 +136,27 @@ get_id:
 	mov rsi,input
 	mov rdx,5
 	syscall
+	cmp rax,4
 	dec rax
+	mov [in_l],rax
+	jne not_found
 	ret
 
 exit:
 	mov rax,60
 	xor rdi,rdi
 	syscall
+	ret
+
+not_found:
+	mov rsi,a4_s
+	mov rdx,a4_l
+	call mp
+	mov rsi,input
+	mov rdx,[in_l]
+	call mp
+	mov rsi,a5_s
+	mov rdx,a5_l
+	call mp
+	jmp exit
 	ret

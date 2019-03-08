@@ -1,0 +1,6 @@
+100|Bolpen|Rp.2000
+101|Pensil|Rp.1500
+102|Penghapus|Rp.700
+103|Buku Tulis|Rp.3500
+104|Buku Gambar|Rp.5000
+105|Penggaris|Rp.4000
